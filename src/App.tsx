@@ -1,5 +1,8 @@
 import Nav from "./components/Nav";
 import Card from "./components/Card"
+import batallaNavalImg from "./assets/img/Batalla naval.png"
+import conectEducatioImg from "./assets/img/Connect Education.png"
+import maljutPizzasImg from "./assets/img/Maljut Pizzas.png"
 
 function App() {
   return (
@@ -20,19 +23,19 @@ function App() {
             <Card 
               title="Batalla naval" 
               description="Simulacion de el juego batalla naval utilizando React, POO y multihilos" 
-              image="/src/assets/img/Batalla naval.png" 
+              image={batallaNavalImg}
               url="https://batalla-naval-navy.vercel.app/"
             />
             <Card 
               title="Landing Pizzería" 
               description="Langing page con redireccionamiento a bot desarrollada con html, css y js puro" 
-              image="/src/assets/img/Maljut Pizzas.png" 
+              image={maljutPizzasImg}
               url="https://chat-bot-page-six.vercel.app/"
             />
             <Card 
               title="Website connect education" 
               description="Red social para comunicacion entre estudiantes de informatica de la Uneg enfocada en proyectos desarrollados, hecho en React, typeScripth y Nextjs" 
-              image="/src/assets/img/Connect Education.png" 
+              image={conectEducatioImg}
               url="https://red-networking-frontend-n1ml.vercel.app/"
             />
           </div>
