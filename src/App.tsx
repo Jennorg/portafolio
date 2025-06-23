@@ -1,10 +1,62 @@
+import React, { useEffect, useState } from 'react';
 import Nav from "./components/Nav";
-import Card from "./components/Card"
-import batallaNavalImg from "./assets/img/Batalla naval.png"
-import conectEducatioImg from "./assets/img/Connect Education.png"
-import maljutPizzasImg from "./assets/img/Maljut Pizzas.png"
+import Card from "./components/Card"; 
+
+
+interface Project {
+  ProjectID: number;
+  Title: string;
+  Description: string;
+  CompletionDate?: string; 
+  RepositoryLink?: string; 
+  DemoLink?: string; 
+  ImageUrl?: string; 
+  Technologies: string[]; 
+}
 
 function App() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {        
+        const response = await fetch('https://portafolio-backend-skss.onrender.com/api/projects');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: Project[] = await response.json();
+        setProjects(data);
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []); 
+
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen w-full bg-black text-white flex items-center justify-center">
+        Cargando proyectos...
+      </div>
+    );
+  }
+
+  
+  if (error) {
+    return (
+      <div className="min-h-screen w-full bg-black text-white flex items-center justify-center text-red-500">
+        Error al cargar los proyectos: {error}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full bg-black text-white relative">
       <Nav />
@@ -20,24 +72,18 @@ function App() {
         <section id="projects" className="w-full h-dvh bg-[#1a2233] py-16 px-2 flex flex-col justify-center items-center align-middle">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">Projects</h2>
           <div className="w-full max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-2 md:px-8">
-            <Card 
-              title="Batalla naval" 
-              description="Simulacion de el juego batalla naval utilizando React, POO y multihilos" 
-              image={batallaNavalImg}
-              url="https://batalla-naval-navy.vercel.app/"
-            />
-            <Card 
-              title="Landing Pizzería" 
-              description="Langing page con redireccionamiento a bot desarrollada con html, css y js puro" 
-              image={maljutPizzasImg}
-              url="https://chat-bot-page-six.vercel.app/"
-            />
-            <Card 
-              title="Website connect education" 
-              description="Red social para comunicacion entre estudiantes de informatica de la Uneg enfocada en proyectos desarrollados, hecho en React, typeScripth y Nextjs" 
-              image={conectEducatioImg}
-              url="https://red-networking-frontend-n1ml.vercel.app/"
-            />
+            {/* Mapea los proyectos obtenidos del estado a componentes Card */}
+            {projects.map((project) => (
+              <Card
+                key={project.ProjectID} 
+                title={project.Title}
+                description={project.Description}
+                image={project.ImageUrl} 
+                demoLink={project.DemoLink} 
+                repositoryLink={project.RepositoryLink} 
+                technologies={project.Technologies} 
+              />
+            ))}
           </div>
         </section>
         {/* Sección About Me */}
@@ -72,7 +118,7 @@ function App() {
         </div>
       </section>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
